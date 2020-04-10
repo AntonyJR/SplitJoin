@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: splitjoin-svc
+  labels:
+    app: splitjoin
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+  selector:
+    app: splitjoin

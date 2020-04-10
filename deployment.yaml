@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: splitjoin-deployment
+spec:
+  selector:
+    matchLabels:
+      app: splitjoin
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: splitjoin
+    spec:
+      containers:
+      - name: splitjoin-container
+        image: iad.ocir.io/oicpm/splitjoin/splitjoin:0.1-slim
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+        - name: pm-registry-secret
