@@ -85,31 +85,59 @@ async def handler(request):
     req = await request.json()
     timeout = req["timeout"]
     tasks = []
+    reqheaders = request.headers
+    print("Headers")
+    for header in reqheaders :
+        print("  "+header+":"+reqheaders[header])
+    headers = dict(reqheaders)
+    del headers["Host"]
+    del headers["Content-Length"]
+    del headers["Connection"]
     async with ClientSession() as session:
         for query in req["queries"]:
-            task = asyncio.create_task(caller(session, query, timeout, request.headers.get('AUTHORIZATION')))
+            task = asyncio.create_task(caller(session, query, timeout, headers))
             tasks.append(task)
         queries = await asyncio.gather(*tasks)
     return web.json_response(queries)
 
 
-async def caller(session, query, timeout, authtoken):
+async def caller(session, query, timeout, headers):
+    headers = dict(headers)
     result = {}
+
     result["start"] = datetime.now().isoformat(sep=" ", timespec="auto")
     id = query["id"]
-    url = query["url"]
-    payload = query["payload"]
     result["id"] = id
-    headers = {}
+
+    method = query["method"] if "method" in query else "POST"
+    if method != "POST" and method != "PUT" and "Content-Type" in headers:
+        del headers["Content-Type"]
+        print("id "+str(id)+" Deleted Content-Type")
+        for header in headers:
+            print("  "+header+":"+headers[header])
+
+    url = query["url"]
+
+    payload = query["payload"] if "payload" in query else None
+
     auth = None
     if "username" in query and "password" in query:
         auth = BasicAuth(login=query["username"],
                          password=query["password"])
-    elif authtoken != None:
-        headers["Authorization"] = authtoken
+        del headers["Authorization"]
+        print("id "+str(id)+" Deleted Authorization")
+
+    qheaders = query["headers"] if "headers" in query else {}
+    for header in qheaders:
+        if header in headers:
+            del headers[header]
+            print("id "+str(id)+" Deleted "+header)
+        headers[header] = qheaders[header]
+
     try:
-        async with session.post(url, json=payload, auth=auth, headers=headers, timeout=timeout) as response:
-            if response.status < 200 or response.status > 299:
+        async with session.request(method, url, json=payload, auth=auth, headers=headers, timeout=timeout) as response:
+            if response.status < 200 or response.status > 299 or not response.content_type.endswith("json"):
+                print("id "+str(id)+" Not json")
                 result["message"] = await response.text()
                 result["status"] = response.status
             else:
