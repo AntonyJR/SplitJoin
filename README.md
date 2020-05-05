@@ -1,23 +1,22 @@
 # SplitJoin Microservice
-Receive a single REST request and split it out into multiple parallel calls.
-Then gather results and return them as a single response.
+[This image][DockerHub] receives a single REST request and splits it out into multiple parallel calls.
+It then gathers the results and returns them as a single response.
 
 This service takes a list of payloads and endpoints and sends the requests to all the endpoints in parallel.
 It then collects the results and returns the results as a list of responses.
 
 To call splitjoin **POST** to URL **/splitjoin**
 
+This image is built on top of the [Python:3-slim] image.
+A [github project][GitHub] contains the build instructions if a customized image is required.
+
 ## Authentication
 Authentication has the following options:
-+ No Authentication
-
-    If no Authorization header is passed to the service and username/password are not specified in the query then the call is made without authentication
-+ Query Specific Basic Authentication
-
-    If username and password are specified in the query then the call is made using basic authentication 
-    
-+ Pass Through Authentication
-
++ No Authentication  
+    If no Authorization header is passed to the service and username/password are not specified in the query then the call is made without authentication  
++ Query Specific Basic Authentication  
+    If username and password are specified in the query then the call is made using basic authentication
++ Pass Through Authentication  
     If no username/password are specified in the query and the request has an Authorization header then call is made using passed in authorization header.
     This allow the authentication to be passed through to the target API unchanged. 
 
@@ -87,3 +86,7 @@ Array: Individual calls to execute.
 
     **payload**  
         JSon: Payload to be sent to the target API.  It can be a primitive or a compound json type.
+
+[Python:3-slim]: https://hub.docker.com/_/python
+[DockerHub]: https://hub.docker.com/r/antonyjreynolds/splitjoin
+[GitHub]: https://github.com/AntonyJR/SplitJoin
