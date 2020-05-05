@@ -14,8 +14,6 @@ spec:
     spec:
       containers:
       - name: splitjoin-container
-        image: iad.ocir.io/oicpm/splitjoin/splitjoin:0.3-slim
+        image: docker.io/antonyjreynolds/splitjoin:latest
         ports:
         - containerPort: 8080
-      imagePullSecrets:
-        - name: pm-registry-secret
