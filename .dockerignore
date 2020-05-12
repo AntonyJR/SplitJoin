@@ -1,4 +1,7 @@
-venv
 .idea
+.gitignore
 .dockerignore
+venv
 Dockerfile
+deployment.yaml
+service-oci-lb.yaml
