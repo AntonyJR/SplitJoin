@@ -23,69 +23,101 @@ Authentication has the following options:
 ## Base Request Structure
 Base request to service has following structure:
 
-    {
-        "timeout" : 30,
-        "queries" : [
-            {
-		    	"id" : "id1",
-			    "url" : "https://server/path",
-			    "method" : "POST",
-    			"username" : "OptionalUsername",
-	    		"password" : "OptionalPassword",
-	    		"headers" : {
-	    		    "header1" : "value1",
-	    		    "header2" : "value2"
-	    		}
-		    	"payload" : {
-			        "any" : "payload",
-			        "goes" : "here""
-		        }
-	        },
-    	    {
-			    "id" : "id2",
-		        "url" : "https://server/path",
-	    	    "payload" : {
-    			    "any" : "payload",
-			        "goes" : "here""
-		        }
-	        }
-	    ]
-    }
+```json5
+{
+    "timeout" : 30,
+    "queries" : [
+        {
+            "id" : "id1",
+            "url" : "https://server/path",
+            "method" : "POST",
+            "username" : "OptionalUsername",
+            "password" : "OptionalPassword",
+            "headers" : {
+                "header1" : "value1",
+                "header2" : "value2"
+            },
+            "payload" : {
+                "any" : "payload",
+                "goes" : "here"
+            }
+        },
+        {
+            "id" : "id2",
+            "url" : "https://server/path",
+            "payload" : {
+                "any" : "payload",
+                "goes" : "here"
+            }
+        }
+    ]
+}
+```
 
 ### JSon Request Object
+    timeout  
+        Integer: Timeout in seconds for each individual request.
+    queries    
+        Array: Individual calls to execute.
+            id  
+                String: Unique identifier =used by client to correlate the query with the response.
+            url  
+                URL: Target API to invoke, currently it will always be invoked with a POST.
+            method  
+                Optional String: HTTP method.
+            username  
+                Optional String: Userename for basic authentication to API.
+            password  
+                Optional String: Password for basic authentication to API.
+            headers  
+                Optional Dictionary: Collection of HTTP headers
+                    header  
+                        String: Header name
+                    value
+                        String: Header value
+            payload
+                JSon: Payload to be sent to the target API.  It can be a primitive or a compound json type.
 
-**timeout**  
-Integer: Timeout in seconds for each individual request.
+## Response Structure
+Response from service has following structure:
 
-**queries**  
-Array: Individual calls to execute.
+```json5
+[
+    {
+        "start": "2020-05-12 02:23:03.839570",
+        "id": "id1",
+        "response": {
+            "any" : "response",
+            "goes" : "here"
+        },
+        "status": 200,
+        "end": "2020-05-12 02:23:27.597740"
+    },
+    {
+        "start": "2020-05-12 02:23:03.843628",
+        "id": "id2",
+        "response": {
+            "any" : "response",
+            "goes" : "here"
+        },
+        "status": 200,
+        "end": "2020-05-12 02:23:30.594746"
+    }
+]
+```
 
-    **id**  
-        String: Unique identifier =used by client to correlate the query with the response.
-
-    **url**  
-        URL: Target API to invoke, currently it will always be invoked with a POST.
-
-    **method**  
-        Optional String: HTTP method.
-
-    **username**  
-        Optional String: Userename for basic authentication to API.
-
-    **password**  
-        Optional String: Password for basic authentication to API.
-
-    **headers**  
-        Optional Dictionary: Collection of HTTP headers
-
-        **header**  
-            String: Header name
-
-        **value**  
-            String: Header value
-
-    **payload**  
-        JSon: Payload to be sent to the target API.  It can be a primitive or a compound json type.
+### JSon Response Object
+    Array: Individual responses.
+        start
+            String: Date time call was made
+        id  
+            String: Unique identifier used by client to correlate the response with the query.
+        response
+            JSon: Response received from the target API.  It can be a primitive or a compound json type.
+        status:
+            Integer: HTTP response code received from call
+        end
+            String: Date time response was received
 
 [Python:3-slim]: https://hub.docker.com/_/python
 [DockerHub]: https://hub.docker.com/r/antonyjreynolds/splitjoin
