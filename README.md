@@ -49,6 +49,15 @@ Base request to service has following structure:
                 "any" : "payload",
                 "goes" : "here"
             }
+        },
+        {
+            "id" : "id3",
+            "url" : "https://server/path",
+            "method" : "GET",
+            "params" : {
+                "param1" : "value1",
+                "param2" : "value2"
+            }
         }
     ]
 }
@@ -77,6 +86,12 @@ Base request to service has following structure:
                         String: Header value
             payload
                 JSon: Payload to be sent to the target API.  It can be a primitive or a compound json type.
+            params
+                Optional Dictionary: Collection of HTTP Parameters
+                    param
+                        String: Param name
+                    value
+                        String: Param value
 
 ## Response Structure
 Response from service has following structure:

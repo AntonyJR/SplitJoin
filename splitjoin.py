@@ -49,6 +49,8 @@ async def caller(session, query, timeout, headers):
 
     payload = query["payload"] if "payload" in query else None
 
+    params = query["params"] if "params" in query else None
+
     auth = None
     if "username" in query and "password" in query:
         auth = BasicAuth(login=query["username"],
@@ -64,7 +66,7 @@ async def caller(session, query, timeout, headers):
         headers[header] = qheaders[header]
 
     try:
-        async with session.request(method, url, json=payload, auth=auth, headers=headers, timeout=timeout) as response:
+        async with session.request(method, url, json=payload, params=params, auth=auth, headers=headers, timeout=timeout) as response:
             if response.status < 200 or response.status > 299 or not response.content_type.endswith("json"):
                 print("id "+str(id)+" Not json")
                 result["message"] = await response.text()
