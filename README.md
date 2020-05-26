@@ -123,11 +123,11 @@ Response from service has following structure:
 There are a number of ways to deploy the service:
 * Run standalone using "python3 splitjoin.py".  Note that this requires [aiohttp] package.
 * Run as a docker image using "docker run -p 8080:8080 docker.io/antonyjreynolds/splitjoin:latest"
-* Deploy to Kubernetes using [deployment.yaml], if using Oracle OCI then the service deployment [service-oic-lb.yaml] will create a load balancer.
+* Deploy to Kubernetes using [deployment.yaml], if using Oracle OCI then the service deployment [service-oci-lb.yaml] will create a load balancer.
 
 [Python:3-slim]: https://hub.docker.com/_/python
 [DockerHub]: https://hub.docker.com/r/antonyjreynolds/splitjoin
 [GitHub]: https://github.com/AntonyJR/SplitJoin
 [deployment.yaml]: https://raw.githubusercontent.com/AntonyJR/SplitJoin/master/deployment.yaml
-[service-oic-lb.yaml]: https://raw.githubusercontent.com/AntonyJR/SplitJoin/master/service-oic-lb.yaml
+[service-oci-lb.yaml]: https://raw.githubusercontent.com/AntonyJR/SplitJoin/master/service-oci-lb.yaml
 [aiohttp]: https://docs.aiohttp.org
