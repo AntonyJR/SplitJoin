@@ -140,9 +140,16 @@ There are a number of ways to deploy the service:
 * Run as a docker image using "docker run -p 8080:8080 docker.io/antonyjreynolds/splitjoin:latest"
 * Deploy to Kubernetes using [deployment.yaml], if using Oracle OCI then the service deployment [service-oci-lb.yaml] will create a load balancer.
 
+## Using with OIC
+A sample package [Recalls.par] is provided that shows how to use splitjoin from OIC.
+When setting up a connection to SplitJoin it is a good idea to set the security credentials to be OIC credentials.
+This can be either Basic Auth or OAuth.
+This will allow the SplitJoin to call OIC integrations without providing any additional credentials in the invoke.
+
 [Python:3-slim]: https://hub.docker.com/_/python
 [DockerHub]: https://hub.docker.com/r/antonyjreynolds/splitjoin
 [GitHub]: https://github.com/AntonyJR/SplitJoin
 [deployment.yaml]: https://raw.githubusercontent.com/AntonyJR/SplitJoin/master/deployment.yaml
 [service-oci-lb.yaml]: https://raw.githubusercontent.com/AntonyJR/SplitJoin/master/service-oci-lb.yaml
 [aiohttp]: https://docs.aiohttp.org
+[Recalls.par]: https://raw.githubusercontent.com/AntonyJR/SplitJoin/master/Recalls.par
