@@ -7,4 +7,6 @@ COPY splitjoin.py ./
 
 CMD [ "python", "./splitjoin.py" ]
 
+ENV LOGGING WARNING
+
 EXPOSE 8080

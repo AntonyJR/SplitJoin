@@ -17,3 +17,6 @@ spec:
         image: docker.io/antonyjreynolds/splitjoin:latest
         ports:
         - containerPort: 8080
+        env:
+          - name: LOGGING
+            value: WARNING

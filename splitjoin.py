@@ -1,5 +1,7 @@
 import asyncio
 from datetime import datetime
+import logging
+import os
 
 from aiohttp import web, ClientSession, BasicAuth, ClientResponseError
 
@@ -15,9 +17,8 @@ async def handler(request):
     timeout = req["timeout"]
     tasks = []
     reqheaders = request.headers
-    print("Headers")
     for header in reqheaders :
-        print("  "+header+":"+reqheaders[header])
+        logging.info("Inbound Request Header %s : %s", header, reqheaders[header])
     headers = dict(reqheaders)
     del headers["Host"]
     del headers["Content-Length"]
@@ -41,9 +42,9 @@ async def caller(session, query, timeout, headers):
     method = query["method"] if "method" in query else "POST"
     if method != "POST" and method != "PUT" and "Content-Type" in headers:
         del headers["Content-Type"]
-        print("id "+str(id)+" Deleted Content-Type")
+        logging.info("Query ID %s Deleted Content-Type", str(id))
         for header in headers:
-            print("  "+header+":"+headers[header])
+            logging.info("Copy Header to Query %s : %s", header, headers[header])
 
     url = query["url"]
 
@@ -56,19 +57,19 @@ async def caller(session, query, timeout, headers):
         auth = BasicAuth(login=query["username"],
                          password=query["password"])
         del headers["Authorization"]
-        print("id "+str(id)+" Deleted Authorization")
+        logging.info("Query ID %s Deleted Authorization", str(id))
 
     qheaders = query["headers"] if "headers" in query else {}
     for header in qheaders:
         if header in headers:
             del headers[header]
-            print("id "+str(id)+" Deleted "+header)
+            logging.info("Query ID %s Deleted %s", str(id), header)
         headers[header] = qheaders[header]
 
     try:
         async with session.request(method, url, json=payload, params=params, auth=auth, headers=headers, timeout=timeout) as response:
             if response.status < 200 or response.status > 299 or not response.content_type.endswith("json"):
-                print("id "+str(id)+" Not json")
+                logging.info("Query Response ID %s Not json", str(id))
                 result["message"] = await response.text()
                 result["status"] = response.status
             else:
@@ -77,6 +78,7 @@ async def caller(session, query, timeout, headers):
     except ClientResponseError as err:
         result["status"] = err.status
         result["message"] = err.message
+        logging.error("Query Response ID %s Returned Status %d Message : %s", str(id), err.status, err.message)
     result["end"] = datetime.now().isoformat(sep=' ', timespec="auto")
     return result
 
@@ -85,6 +87,11 @@ app = web.Application()
 app.add_routes([web.get('/', handle),
                 web.get('/{name}', handle),
                 web.post('/splitjoin', handler)])
+def init_logging():
+    loglevel = os.getenv("LOGGING", "WARNING").upper()
+    numeric_log_level = getattr(logging, loglevel, logging.WARNING)
+    logging.basicConfig(level=numeric_log_level)
 
 if __name__ == '__main__':
+    init_logging()
     web.run_app(app)
