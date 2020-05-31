@@ -71,10 +71,10 @@ async def caller(session, query, timeout, headers):
             if response.status < 200 or response.status > 299 or not response.content_type.endswith("json"):
                 logging.info("Query Response ID %s Not json", str(id))
                 result["message"] = await response.text()
-                result["status"] = response.status
             else:
                 result["response"] = await response.json()
-                result["status"] = response.status
+            result["headers"] = dict(response.headers)
+            result["status"] = response.status
     except ClientResponseError as err:
         result["status"] = err.status
         result["message"] = err.message

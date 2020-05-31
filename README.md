@@ -105,6 +105,10 @@ Response from service has following structure:
             "any" : "response",
             "goes" : "here"
         },
+        "headers": {
+            "header1" : "value1",
+            "header2" : "value2"
+        },
         "status": 200,
         "end": "2020-05-12 02:23:27.597740"
     },
@@ -114,6 +118,10 @@ Response from service has following structure:
         "response": {
             "any" : "response",
             "goes" : "here"
+        },
+        "headers": {
+            "header1" : "value1",
+            "header2" : "value2"
         },
         "status": 200,
         "end": "2020-05-12 02:23:30.594746"
@@ -129,6 +137,12 @@ Response from service has following structure:
             String: Unique identifier used by client to correlate the response with the query.
         response
             JSon: Response received from the target API.  It can be a primitive or a compound json type.
+        headers:
+            Dictionary: Received HTTP Headers
+                header  
+                    String: Header name
+                value
+                    String: Header value
         status:
             Integer: HTTP response code received from call
         end
