@@ -64,6 +64,64 @@
 			"response": []
 		},
 		{
+			"name": "Single Query XML Success NHSTA API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "05739ec3-18a2-4ee0-8b4f-21a532eef068",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is JSon\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"application/json; charset=utf-8\");",
+							"});",
+							"pm.test(\"Expected Fields Present\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.all.keys('start', 'id', 'message', 'headers', 'status', 'end');",
+							"});",
+							"pm.test(\"ID Field Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].id).to.eql(\"id1\");",
+							"});",
+							"pm.test(\"Response Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].message).to.include('<Response');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeout\" : 30,\n    \"queries\" : [\n        {\n            \"id\" : \"id1\",\n            \"url\" : \"https://one.nhtsa.gov/webapi/api/Recalls/vehicle/modelyear/2019/make/tesla\",\n            \"method\" : \"GET\",\n            \"params\" : {\n                \"format\" : \"xml\"\n            }\n        }\n    ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}/splitjoin",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"splitjoin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Single Query Bad Path NHSTA API",
 			"event": [
 				{
