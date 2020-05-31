@@ -51,8 +51,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{HOST}}/splitjoin",
-					"protocol": "http",
+					"raw": "{{HOST}}/splitjoin",
 					"host": [
 						"{{HOST}}"
 					],
@@ -109,8 +108,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{HOST}}/splitjoin",
-					"protocol": "http",
+					"raw": "{{HOST}}/splitjoin",
 					"host": [
 						"{{HOST}}"
 					],
@@ -167,8 +165,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{HOST}}/splitjoin",
-					"protocol": "http",
+					"raw": "{{HOST}}/splitjoin",
 					"host": [
 						"{{HOST}}"
 					],
@@ -225,13 +222,50 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{HOST}}/splitjoin",
-					"protocol": "http",
+					"raw": "{{HOST}}/splitjoin",
 					"host": [
 						"{{HOST}}"
 					],
 					"path": [
 						"splitjoin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Help Screen",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1741c3c4-8ae6-4dda-b575-cd9568732037",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is HTML\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"text/html; charset=utf-8\");",
+							"});",
+							"pm.test(\"Body matches SplitJoin MicroService\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin Microservice</h1>\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/help",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"help"
 					]
 				}
 			},
