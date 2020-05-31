@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "f0f171ab-7014-4bc6-8d85-d4c27bde8faf",
+		"name": "SplitJoin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Single Query Success NHSTA API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "496baecd-5e4f-47df-b433-9fa42e22d33f",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is JSon\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"application/json; charset=utf-8\");",
+							"});",
+							"pm.test(\"Expected Fields Present\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.all.keys('start', 'id', 'response', 'headers', 'status', 'end');",
+							"});",
+							"pm.test(\"ID Field Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].id).to.eql(\"id1\");",
+							"});",
+							"pm.test(\"Response Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].response).to.all.have.keys('Count', 'Message', 'Results');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeout\" : 30,\n    \"queries\" : [\n        {\n            \"id\" : \"id1\",\n            \"url\" : \"https://one.nhtsa.gov/webapi/api/Recalls/vehicle/modelyear/2019/make/tesla\",\n            \"method\" : \"GET\",\n            \"params\" : {\n                \"format\" : \"json\"\n            }\n        }\n    ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}/splitjoin",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"splitjoin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Single Query Bad Path NHSTA API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7ef0b17f-67eb-4732-a254-de1b691162bd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is JSon\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"application/json; charset=utf-8\");",
+							"});",
+							"pm.test(\"Expected Fields Present\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.all.keys('start', 'id', 'message', 'headers', 'status', 'end');",
+							"});",
+							"pm.test(\"ID Field Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].id).to.eql(\"id1\");",
+							"});",
+							"pm.test(\"Response Status 404\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].status).to.eql(404);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeout\" : 30,\n    \"queries\" : [\n        {\n            \"id\" : \"id1\",\n            \"url\" : \"https://one.nhtsa.gov/webapi/a/Recalls/vehicle/modelyear/2019/make/tesla\",\n            \"method\" : \"GET\",\n            \"params\" : {\n                \"format\" : \"json\"\n            }\n        }\n    ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}/splitjoin",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"splitjoin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Multiple Query Success NHSTA API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "885ed160-132c-4b36-bfc6-fc1c253dbd46",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is JSon\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"application/json; charset=utf-8\");",
+							"});",
+							"pm.test(\"Expected Fields Present\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1]).to.have.all.keys('start', 'id', 'response', 'headers', 'status', 'end');",
+							"});",
+							"pm.test(\"ID Field Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1].id).to.eql(\"id2\");",
+							"});",
+							"pm.test(\"Response Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1].response).to.all.have.keys('Count', 'Message', 'Results');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeout\" : 30,\n    \"queries\" : [\n        {\n            \"id\" : \"id1\",\n            \"url\" : \"https://one.nhtsa.gov/webapi/api/Recalls/vehicle/modelyear/2019/make/tesla?format=json\",\n            \"method\" : \"GET\"\n        },\n        {\n            \"id\" : \"id2\",\n            \"url\" : \"https://one.nhtsa.gov/webapi/api/Recalls/vehicle/modelyear/2019/make/chrysler\",\n            \"method\" : \"GET\",\n            \"params\" : {\n                \"format\" : \"json\"\n            }\n        }\n    ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{HOST}}/splitjoin",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"splitjoin"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
