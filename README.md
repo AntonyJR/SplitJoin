@@ -159,7 +159,7 @@ Response from service has following structure:
 ## Deployment
 There are a number of ways to deploy the service:
 
-* Run standalone using "python3 splitjoin.py".  Note that this requires [aiohttp] package.
+* Run standalone using "python3 splitjoin.py".  Note that this requires [aiohttp] and [markdown] packages.
 * Run as a docker image using "docker run -p 8080:8080 docker.io/antonyjreynolds/splitjoin:latest"
 * Deploy to Kubernetes using [deployment.yaml], if using Oracle OCI then the service deployment [service-oci-lb.yaml] will create a load balancer.
 
@@ -175,4 +175,5 @@ This will allow the SplitJoin to call OIC integrations without providing any add
 [deployment.yaml]: https://raw.githubusercontent.com/AntonyJR/SplitJoin/master/deployment.yaml
 [service-oci-lb.yaml]: https://raw.githubusercontent.com/AntonyJR/SplitJoin/master/service-oci-lb.yaml
 [aiohttp]: https://docs.aiohttp.org
+[markdown]: https://pypi.org/project/Markdown/
 [Recalls.par]: https://raw.githubusercontent.com/AntonyJR/SplitJoin/master/Recalls.par
