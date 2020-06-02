@@ -234,6 +234,63 @@
 			"response": []
 		},
 		{
+			"name": "Multiple Query Success non-splitjoin URL NHSTA API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f07299e5-31ba-4714-8187-7bf985d256c5",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is JSon\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"application/json; charset=utf-8\");",
+							"});",
+							"pm.test(\"Expected Fields Present\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1]).to.have.all.keys('start', 'id', 'response', 'headers', 'status', 'end');",
+							"});",
+							"pm.test(\"ID Field Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1].id).to.eql(\"id2\");",
+							"});",
+							"pm.test(\"Response Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1].response).to.all.have.keys('Count', 'Message', 'Results');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeout\" : 30,\n    \"queries\" : [\n        {\n            \"id\" : \"id1\",\n            \"url\" : \"https://one.nhtsa.gov/webapi/api/Recalls/vehicle/modelyear/2019/make/tesla?format=json\",\n            \"method\" : \"GET\"\n        },\n        {\n            \"id\" : \"id2\",\n            \"url\" : \"https://one.nhtsa.gov/webapi/api/Recalls/vehicle/modelyear/2019/make/chrysler\",\n            \"method\" : \"GET\",\n            \"params\" : {\n                \"format\" : \"json\"\n            }\n        }\n    ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Help Screen",
 			"event": [
 				{
@@ -266,6 +323,122 @@
 					],
 					"path": [
 						"help"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Help Screen Root",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b20ccb29-a05f-4209-9d28-a0ad457f400a",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is HTML\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"text/html; charset=utf-8\");",
+							"});",
+							"pm.test(\"Body matches SplitJoin MicroService\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin Microservice</h1>\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Help Screen Non-Help URL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9b2d4c30-2fbe-4933-9182-f533fbe336be",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is HTML\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"text/html; charset=utf-8\");",
+							"});",
+							"pm.test(\"Body matches SplitJoin MicroService\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin Microservice</h1>\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/any/old/url",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"any",
+						"old",
+						"url"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Help Screen splitjoin URL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "602028df-5dbc-4fb2-af6a-bc5a53593c97",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is HTML\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"text/html; charset=utf-8\");",
+							"});",
+							"pm.test(\"Body matches SplitJoin MicroService\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin Microservice</h1>\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/splitjoin",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"splitjoin"
 					]
 				}
 			},

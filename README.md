@@ -5,7 +5,10 @@ It then gathers the results and returns them as a single response.
 This service takes a list of payloads and endpoints and sends the requests to all the endpoints in parallel.
 It then collects the results and returns the results as a list of responses.
 
-To call splitjoin **POST** to URL **/splitjoin**
+To call splitjoin **POST** to any URL on the splitjoin server.
+The requirement to POST specifically to **/splitjoin** has been removed.
+
+If a **GET** is done to any URL on the splitjoin server it will return this help.
 
 This image is built on top of the [Python:3-slim] image.
 A [github project][GitHub] contains the build instructions if a customized image is required.

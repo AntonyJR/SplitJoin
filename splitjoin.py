@@ -85,9 +85,8 @@ async def caller(session, query, timeout, headers):
 
 def init_app():
     app = web.Application()
-    app.add_routes([web.get('/', handlehelp),
-                    web.post('/splitjoin', handler),
-                    web.get('/help', handlehelp)])
+    app.add_routes([web.get('/{tail:.*}', handlehelp),
+                    web.post('/{tail:.*}', handler)])
     web.run_app(app)
 
 
