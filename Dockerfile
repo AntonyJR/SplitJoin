@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 
 RUN pip install aiohttp
 RUN pip install markdown
+RUN pip install redis
 COPY splitjoin.py ./
 COPY README.md ./
 

@@ -63,6 +63,63 @@
 			"response": []
 		},
 		{
+			"name": "Single Query Cache Success NHSTA API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "73c1a86f-8426-4b35-b325-b2485b94327d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is JSon\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"application/json; charset=utf-8\");",
+							"});",
+							"pm.test(\"Expected Fields Present\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0]).to.have.all.keys('start', 'id', 'response', 'headers', 'status', 'cached', 'end');",
+							"});",
+							"pm.test(\"ID Field Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].id).to.eql(\"id1\");",
+							"});",
+							"pm.test(\"Response Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].response).to.all.have.keys('Count', 'Message', 'Results');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeout\" : 30,\n    \"queries\" : [\n        {\n            \"id\" : \"id1\",\n            \"url\" : \"https://one.nhtsa.gov/webapi/api/Recalls/vehicle/modelyear/2019/make/tesla\",\n            \"method\" : \"GET\",\n            \"params\" : {\n                \"format\" : \"json\"\n            },\n            \"cachekey\" : \"recalls-2019-tesla\",\n            \"cachettl\" : 30\n        }\n    ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/splitjoin",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"splitjoin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Single Query XML Success NHSTA API",
 			"event": [
 				{
@@ -234,6 +291,63 @@
 			"response": []
 		},
 		{
+			"name": "Multiple Query Cache Success NHSTA API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8d4bb7d5-ff31-4674-917f-27a3a2c825d0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.be.ok;",
+							"});",
+							"pm.test(\"Content-Type is JSon\", function () {",
+							"    var headers = pm.response.headers;",
+							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"application/json; charset=utf-8\");",
+							"});",
+							"pm.test(\"Expected Fields Present\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1]).to.have.all.keys('start', 'id', 'response', 'headers', 'status', 'cached', 'end');",
+							"});",
+							"pm.test(\"ID Field Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1].id).to.eql(\"id2\");",
+							"});",
+							"pm.test(\"Response Correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1].response).to.all.have.keys('Count', 'Message', 'Results');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeout\" : 30,\n    \"queries\" : [\n        {\n            \"id\" : \"id1\",\n            \"url\" : \"https://one.nhtsa.gov/webapi/api/Recalls/vehicle/modelyear/2019/make/tesla?format=json\",\n            \"method\" : \"GET\",\n            \"cachekey\" : \"recalls-2019-tesla\",\n            \"cachettl\" : 30\n        },\n        {\n            \"id\" : \"id2\",\n            \"url\" : \"https://one.nhtsa.gov/webapi/api/Recalls/vehicle/modelyear/2019/make/chrysler\",\n            \"method\" : \"GET\",\n            \"params\" : {\n                \"format\" : \"json\"\n            },\n            \"cachekey\" : \"recalls-2019-chrysler\",\n            \"cachettl\" : 30\n        }\n    ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/splitjoin",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"splitjoin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Multiple Query Success non-splitjoin URL NHSTA API",
 			"event": [
 				{
@@ -306,7 +420,7 @@
 							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"text/html; charset=utf-8\");",
 							"});",
 							"pm.test(\"Body matches SplitJoin MicroService\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin Microservice</h1>\");",
+							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin \\&amp; Caching Microservice</h1>\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -344,7 +458,7 @@
 							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"text/html; charset=utf-8\");",
 							"});",
 							"pm.test(\"Body matches SplitJoin MicroService\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin Microservice</h1>\");",
+							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin \\&amp; Caching Microservice</h1>\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -382,7 +496,7 @@
 							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"text/html; charset=utf-8\");",
 							"});",
 							"pm.test(\"Body matches SplitJoin MicroService\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin Microservice</h1>\");",
+							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin \\&amp; Caching Microservice</h1>\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -422,7 +536,7 @@
 							"    pm.expect(headers.get(\"Content-Type\")).to.eql(\"text/html; charset=utf-8\");",
 							"});",
 							"pm.test(\"Body matches SplitJoin MicroService\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin Microservice</h1>\");",
+							"    pm.expect(pm.response.text()).to.include(\"<h1>SplitJoin \\&amp; Caching Microservice</h1>\");",
 							"});"
 						],
 						"type": "text/javascript"
